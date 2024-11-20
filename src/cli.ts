@@ -6,9 +6,9 @@ import {
 } from './index';
 process.env.NO_COLOR = '1';
 const FLAGS = {
-  '--acl': CLONE_ACL as number,
-  '--nofollow': CLONE_NOFOLLOW as number,
-  '--noownercopy': CLONE_NOOWNERCOPY as number,
+  '--acl': CLONE_ACL,
+  '--nofollow': CLONE_NOFOLLOW,
+  '--noownercopy': CLONE_NOOWNERCOPY,
 };
 const FLAG_S = Object.keys(FLAGS)
   .map((flag) => `[${flag}]`)
@@ -29,7 +29,7 @@ if (FLAGS[src] || FLAGS[dest]) {
 let flags: number = 0;
 process.argv.forEach((arg) => {
   if (arg in FLAGS) {
-    flags |= FLAGS[arg] ?? 0;
+    flags |= FLAGS[arg];
   }
 });
 

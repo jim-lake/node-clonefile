@@ -24,7 +24,7 @@ if (FLAGS[src] || FLAGS[dest]) {
 let flags = 0;
 process.argv.forEach((arg) => {
   if (arg in FLAGS) {
-    flags |= FLAGS[arg] ?? 0;
+    flags |= FLAGS[arg];
   }
 });
 (0, index_1.clonefile)(src, dest, flags, (err) => {
