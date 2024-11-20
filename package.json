@@ -1,6 +1,5 @@
 {
   "name": "node-clonefile",
-  "private": true,
   "version": "0.0.1",
   "description": "Darwin clonefile api for node",
   "keywords": [
@@ -10,6 +9,10 @@
     "BSD"
   ],
   "main": "dist/index.js",
+  "bin": {
+    "clonefile": "dist/cli.js"
+  },
+  "os": ["darwin"],
   "gypfile": true,
   "license": "MIT",
   "files": [
