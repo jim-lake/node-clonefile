@@ -6,6 +6,7 @@ const FLAGS = {
   '--acl': index_1.CLONE_ACL,
   '--nofollow': index_1.CLONE_NOFOLLOW,
   '--noownercopy': index_1.CLONE_NOOWNERCOPY,
+  '--overwrite': index_1.CLONE_OVERWRITE,
 };
 const FLAG_S = Object.keys(FLAGS)
   .map((flag) => `[${flag}]`)

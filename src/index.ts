@@ -21,9 +21,11 @@ export function clonefile(
 export const CLONE_NOFOLLOW = 0x01;
 export const CLONE_NOOWNERCOPY = 0x02;
 export const CLONE_ACL = 0x04;
+export const CLONE_OVERWRITE = 0x10000;
 export default {
   clonefile,
   CLONE_NOFOLLOW,
   CLONE_NOOWNERCOPY,
   CLONE_ACL,
+  CLONE_OVERWRITE,
 };

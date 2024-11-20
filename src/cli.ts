@@ -3,12 +3,14 @@ import {
   CLONE_NOFOLLOW,
   CLONE_NOOWNERCOPY,
   CLONE_ACL,
+  CLONE_OVERWRITE,
 } from './index';
 process.env.NO_COLOR = '1';
 const FLAGS = {
   '--acl': CLONE_ACL,
   '--nofollow': CLONE_NOFOLLOW,
   '--noownercopy': CLONE_NOOWNERCOPY,
+  '--overwrite': CLONE_OVERWRITE,
 };
 const FLAG_S = Object.keys(FLAGS)
   .map((flag) => `[${flag}]`)

@@ -2,25 +2,40 @@
 #include <stdio.h>
 #include <sys/attr.h>
 #include <sys/clonefile.h>
+#include <unistd.h>
 
 using namespace Napi;
+
+const int CLONE_OVERWRITE = 0x10000;
 
 class CloneWorker : public AsyncWorker {
 public:
   CloneWorker(const Function &callback, const std::string &src,
               const std::string &dest, const int flags)
       : AsyncWorker(callback, "clonefile"), _src(src), _dest(dest),
-        _flags(flags) {}
+        _flags(flags), _errno(0) {}
 
   ~CloneWorker() {}
   void Execute() override {
-    const auto ret =
-        clonefile(this->_src.c_str(), this->_dest.c_str(), this->_flags);
-    if (ret == -1) {
+    const auto overwrite = this->_flags & CLONE_OVERWRITE;
+    const auto flags = this->_flags & ~CLONE_OVERWRITE;
+    auto ret = clonefile(this->_src.c_str(), this->_dest.c_str(), flags);
+    if (ret != 0) {
       this->_errno = errno;
-      const char *str_err = strerror(this->_errno);
-      const std::string err = str_err == NULL ? "Unknown error" : str_err;
-      SetError(err);
+      if (this->_errno == EEXIST && overwrite) {
+        unlink(this->_dest.c_str());
+        ret = clonefile(this->_src.c_str(), this->_dest.c_str(), flags);
+        if (ret == 0) {
+          this->_errno = 0;
+        } else {
+          this->_errno = errno;
+        }
+      }
+      if (this->_errno != 0) {
+        const char *str_err = strerror(this->_errno);
+        const std::string err = str_err == NULL ? "Unknown error" : str_err;
+        SetError(err);
+      }
     }
   }
   void OnError(const Napi::Error &error) override {
