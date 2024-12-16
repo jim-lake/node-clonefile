@@ -8,6 +8,79 @@ using namespace Napi;
 
 const int CLONE_OVERWRITE = 0x10000;
 
+static const char *_errorToCode(const int error) {
+  switch (error) {
+  case EPERM:
+    return "EPERM";
+  case ENOENT:
+    return "ENOENT";
+  case ESRCH:
+    return "ESRCH";
+  case EINTR:
+    return "EINTR";
+  case EIO:
+    return "EIO";
+  case ENXIO:
+    return "ENXIO";
+  case E2BIG:
+    return "E2BIG";
+  case ENOEXEC:
+    return "ENOEXEC";
+  case EBADF:
+    return "EBADF";
+  case ECHILD:
+    return "ECHILD";
+  case EAGAIN:
+    return "EAGAIN";
+  case ENOMEM:
+    return "ENOMEM";
+  case EACCES:
+    return "EACCES";
+  case EFAULT:
+    return "EFAULT";
+  case EBUSY:
+    return "EBUSY";
+  case EEXIST:
+    return "EEXIST";
+  case EXDEV:
+    return "EXDEV";
+  case ENODEV:
+    return "ENODEV";
+  case ENOTDIR:
+    return "ENOTDIR";
+  case EISDIR:
+    return "EISDIR";
+  case EINVAL:
+    return "EINVAL";
+  case ENFILE:
+    return "ENFILE";
+  case EMFILE:
+    return "EMFILE";
+  case ENOTTY:
+    return "ENOTTY";
+  case ETXTBSY:
+    return "ETXTBSY";
+  case EFBIG:
+    return "EFBIG";
+  case ENOSPC:
+    return "ENOSPC";
+  case ESPIPE:
+    return "ESPIPE";
+  case EROFS:
+    return "EROFS";
+  case EMLINK:
+    return "EMLINK";
+  case EPIPE:
+    return "EPIPE";
+  case EDOM:
+    return "EDOM";
+  case ERANGE:
+    return "ERANGE";
+  default:
+    return "UNKNOWN";
+  }
+}
+
 class CloneWorker : public AsyncWorker {
 public:
   CloneWorker(const Function &callback, const std::string &src,
@@ -41,6 +114,7 @@ public:
   void OnError(const Napi::Error &error) override {
     HandleScope scope(Env());
     error.Set("errno", Number::New(Env(), this->_errno));
+    error.Set("code", String::New(Env(), _errorToCode(this->_errno)));
     AsyncWorker::OnError(error);
   }
 

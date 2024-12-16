@@ -30,7 +30,7 @@ process.argv.forEach((arg) => {
 });
 (0, index_1.clonefile)(src, dest, flags, (err) => {
   if (err) {
-    console.error('clonefile: error:', err.message);
+    console.error('clonefile: error:', err.code, err.message);
     process.exit(err.errno || -2);
   } else {
     process.exit(0);
